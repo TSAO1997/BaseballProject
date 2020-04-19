@@ -6,6 +6,7 @@ input_1 = '../material/LHB_240FPS/143447.avi'
 
 mono_clip_0 = read_clip_mono(input_0)
 mono_clip_1 = read_clip_mono(input_1)
+
 if not mono_clip_0 or not mono_clip_1:
     print("Fail to read input")
 
@@ -33,13 +34,12 @@ keyframe_0 = get_keyframe(mono_clip_0)
 keyframe_1 = get_keyframe(mono_clip_1)
 end_frame = min(keyframe_0,keyframe_1)
 
-clip_0 = mono_clip_0[abs(end_frame-keyframe_0):keyframe_0+abs(end_frame-keyframe_0)]
-clip_1 = mono_clip_1[abs(end_frame-keyframe_1):keyframe_1+abs(end_frame-keyframe_1)]
+clip_0 = mono_clip_0[abs(end_frame-keyframe_0):keyframe_0+abs(end_frame-keyframe_0)+40]
+clip_1 = mono_clip_1[abs(end_frame-keyframe_1):keyframe_1+abs(end_frame-keyframe_1)+40]
 
-#!! 下面影片會結束在擊球點，就應用而言，會希望再看一下，觀察揮棒的延伸軌跡以及擊球結果
-for i in range(end_frame):
+for i in range(len(clip_0)):
     output = np.hstack((clip_0[i],clip_1[i]))
     cv2.imshow('Compare', output)
     cv2.waitKey(15)
-    if i == end_frame-1:
+    if i == len(clip_0)-1:
         cv2.waitKey(0)
