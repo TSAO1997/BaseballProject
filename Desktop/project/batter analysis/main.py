@@ -10,7 +10,7 @@ if not mono_clip_0 or not mono_clip_1:
     print("Fail to read input")
 
 hist ,thres = 8, 128
-#!! 如果有重複使用的code盡量函示化
+
 def get_keyframe(mono_clip):
     ball_detector = MovingBallDetector(mono_clip[0],hist=hist, thres=thres, kr=3)
     temp_kp_x = (-1,-1)
