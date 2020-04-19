@@ -10,7 +10,7 @@ if not mono_clip_0 or not mono_clip_1:
     print("Fail to read input")
 
 hist ,thres = 8, 128
-#!! 如果有重複使用的code盡量函示化
+
 def get_keyframe(mono_clip):
     ball_detector = MovingBallDetector(mono_clip[0],hist=hist, thres=thres, kr=3)
     temp_kp_x = (-1,-1)
@@ -21,13 +21,11 @@ def get_keyframe(mono_clip):
         if not kps:
             continue
         else:
-            #!! 在稍稍複雜要多花幾秒去閱讀的判斷式，可以先用命名代替註解，例如
             ball_is_going_left_nearby = (temp_kp_x[1]>kps[0].pt[0] and abs(temp_kp_x[1]-kps[0].pt[0])<=40)
             if ball_is_going_left_nearby:
                 keyframe = int((i+temp_kp_x[0])/2)
                 return keyframe
             else:
-                #!! temp_kp_0[0] = (i,kps[0].pt[0])   看起來只有一項似乎不需用list?
                 temp_kp_x = (i,kps[0].pt[0])
     
 
