@@ -3,10 +3,7 @@ import numpy as np
 import cv2
 import imutils
 import sys
-
-video_path_1 = './cam_7_1004.avi'
-video_path_2 = './cam_7_1006.avi'
-
+import time
 
 def mark_ball_track(video_path):
     tracker = cv2.TrackerCSRT_create()
@@ -69,16 +66,26 @@ def mark_ball_track(video_path):
     return clip
 
 
-clip_1 = mark_ball_track(video_path_1)
-clip_2 = mark_ball_track(video_path_2)
-print(len(clip_1))
-print(len(clip_2))
-alpha = 0.5
-fourcc = cv2.VideoWriter_fourcc(*'XVID')
-out = cv2.VideoWriter('testing.avi', fourcc, 30.0, (720, 540))
-final_clip_len = min(len(clip_1), len(clip_2))
-for i in range(final_clip_len):
-    clip_overlapped = cv2.addWeighted(clip_1[i],alpha,clip_2[i],1-alpha,0)
-    out.write(clip_overlapped)
-'''video.release()'''
-out.release()
+def write_overlapped_clip(clip_1, clip_2):
+    alpha = 0.5
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    out = cv2.VideoWriter('testing_%d.avi'%int(time.time()), fourcc, 30.0, (720, 540))
+    final_clip_len = min(len(clip_1), len(clip_2))
+    for i in range(final_clip_len):
+        clip_overlapped = cv2.addWeighted(clip_1[i],alpha,clip_2[i],1-alpha,0)
+        out.write(clip_overlapped)
+    '''video.release()'''
+    out.release()
+
+if __name__=='__main__':
+    video_path_1 = 'D:/K-zone/saved_clip/彩色左打視角/cam_7_963.avi'
+    video_path_2 = 'D:/K-zone/saved_clip/彩色左打視角/cam_7_965.avi'
+    manual_frame_shift = 12
+
+    clip_1 = mark_ball_track(video_path_1)
+    clip_2 = mark_ball_track(video_path_2)[manual_frame_shift::]
+    print("Clip size:"+str(len(clip_1)))
+    print("Clip size:"+str(len(clip_2)))    
+    write_overlapped_clip(clip_1, clip_2)
+    pass
+
